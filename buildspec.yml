@@ -10,23 +10,22 @@ phases:
 
   pre_build:
     commands:
-      - echo "Pre-build cleanup..."
-      - rm -rf lambda.zip node_modules.zip || true
+      - echo "Cleaning up old artifacts..."
+      - rm -f lambda.zip || true
 
   build:
     commands:
-      - echo "Build phase: verifying files..."
-      - ls -la
-      - echo "Build complete. Preparing for deployment."
+      - echo "Zipping Lambda function..."
+      - zip -r lambda.zip index.js node_modules
+      - echo "Build complete."
 
   post_build:
     commands:
-      - echo "Post-build: confirming deployment files..."
-      - ls -la
-      - echo "Build process finished successfully."
+      - echo "Verifying zip contents..."
+      - unzip -l lambda.zip
+      - echo "Build process finished."
 
 artifacts:
   files:
-    - index.js
-    - node_modules/**/*  # Include all dependencies
-  discard-paths: no
+    - lambda.zip
+  discard-paths: yes
