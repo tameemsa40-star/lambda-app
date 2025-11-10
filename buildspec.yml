@@ -7,19 +7,26 @@ phases:
     commands:
       - echo "Installing dependencies..."
       - npm install
+
   pre_build:
     commands:
-      - echo "Cleaning up previous builds..."
-      - rm -rf package.zip lambda.zip || true
+      - echo "Pre-build cleanup..."
+      - rm -rf node_modules.zip lambda.zip || true
+
   build:
     commands:
-      - echo "Zipping Lambda function..."
-      - zip -r lambda.zip index.js node_modules
+      - echo "Build phase: verifying files..."
+      - ls -la
+      - echo "Build complete. Preparing for deployment."
+
   post_build:
     commands:
-      - echo "Build completed. lambda.zip is ready."
+      - echo "Post-build: confirming deployment files..."
+      - ls -la
+      - echo "Build process finished successfully."
 
 artifacts:
   files:
-    - lambda.zip
-  discard-paths: yes
+    - index.js
+    - node_modules/**/*  # Include all dependencies
+  discard-paths: no
